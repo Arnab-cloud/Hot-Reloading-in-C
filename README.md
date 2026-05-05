@@ -30,7 +30,3 @@ Now when you want to change something you can just make the changes in `game.c` 
 
 > [!CAUTION]
 > BUG: If you try to reload the animation while it is still reloading, the window flashes infinitely and the program will go into infinite loop.
-
-> [!CAUTION]
-> At this stage the engine reloads the whole animation so the state is lost.
-> That Means it is not hot reloading (STILL).
