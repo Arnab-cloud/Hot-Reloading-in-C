@@ -36,9 +36,12 @@ void update_game(void *state) {
     int y = cur_state->distance * sinf(cur_state->angle);
     cur_state->angle += SPEED * GetFrameTime();
     ClearBackground(BLACK);
-    DrawCircle(WIDTH / 2 + x, HEIGHT / 2 - y, cur_state->rad, RED);
+    DrawCircle(WIDTH / 2 + x, HEIGHT / 2 - y, cur_state->rad, BLUE);
 }
 
-void clear_game(void *state) { printf("INFO: GAME: clear called\n"); }
+void clear_game(void *state) {
+    printf("INFO: GAME: clear called\n");
+    free(state);
+}
 
 int add_game(int a, int b) { return a * b; }

@@ -79,13 +79,11 @@ int main(int argc, char *argv[]) {
             continue;
         }
         CloseWindow();
-        clear_game_r(state);
 
         init_game_r = (init_game_t)dlsym(updated_handle, "init_game");
         update_game_r = (update_game_t)dlsym(updated_handle, "update_game");
         clear_game_r = (clear_game_t)dlsym(updated_handle, "clear_game");
 
-        init_game_r();
         InitWindow(800, 600, "Window");
         printf("INFO: New dll found and loaded\n");
 
