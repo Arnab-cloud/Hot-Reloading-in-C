@@ -29,5 +29,8 @@ $ .\build\main.exe .\build\game.dll
 Now when you want to change something you can just make the changes in `game.c` and then compile it as dll. The `main.exe` will reload the animation without you manually stoping and restarting the animation.
 
 > [!CAUTION]
-> Now the engine reloads the whole animation so the state is lost.
+> BUG: If you try to reload the animation while it is still reloading, the window flashes infinitely and the program will go into infinite loop.
+
+> [!CAUTION]
+> At this stage the engine reloads the whole animation so the state is lost.
 > That Means it is not hot reloading (STILL).
