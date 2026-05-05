@@ -100,9 +100,9 @@ int main(int argc, char *argv[]) {
 
     CloseWindow();
     clear_game_r(state);
-    clean_dll(dll_path);
 
     printf("INFO: Value of dlclose: %d\n", dlclose(handle));
+    clean_dll(dll_path);
     return 0;
 }
 
