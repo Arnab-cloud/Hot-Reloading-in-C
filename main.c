@@ -28,11 +28,12 @@ int main(int argc, char *argv[]) {
     }
 
     const char *src_dll = argv[argc - 1];
+    char dll_path[100];
+    char old_dll_path[100];
+    void *state = NULL;
 
     printf("INFO: The dynamic libarary: %s\n", src_dll);
 
-    char dll_path[100];
-    char old_dll_path[100];
     sprintf(dll_path, "%s_tmp_%d", src_dll, reload_counter++);
     if (!copy_file(src_dll, dll_path)) {
         fprintf(stderr, "ERROR: failed to copy file\n");
@@ -50,13 +51,13 @@ int main(int argc, char *argv[]) {
     update_game_t update_game_r = (update_game_t)dlsym(handle, "update_game");
     clear_game_t clear_game_r = (clear_game_t)dlsym(handle, "clear_game");
 
-    init_game_r();
+    state = init_game_r();
     InitWindow(800, 600, "Window");
 
     while (!WindowShouldClose()) {
         if (get_update_state(src_dll) != UPDATED) {
             BeginDrawing();
-            update_game_r();
+            update_game_r(state);
             EndDrawing();
             continue;
         }
@@ -78,7 +79,7 @@ int main(int argc, char *argv[]) {
             continue;
         }
         CloseWindow();
-        clear_game_r();
+        clear_game_r(state);
 
         init_game_r = (init_game_t)dlsym(updated_handle, "init_game");
         update_game_r = (update_game_t)dlsym(updated_handle, "update_game");
@@ -100,7 +101,7 @@ int main(int argc, char *argv[]) {
     }
 
     CloseWindow();
-    clear_game_r();
+    clear_game_r(state);
     clean_dll(dll_path);
 
     printf("INFO: Value of dlclose: %d\n", dlclose(handle));
@@ -156,17 +157,14 @@ bool copy_file(const char *src_path, const char *dest_path) {
     size_t bytes;
 
     while ((bytes = fread(buffer, 1, sizeof(buffer), src)) > 0) {
-        // printf("INFO: Copied %lld bytes\n", bytes);
         fwrite(buffer, 1, bytes, dest);
     }
 
-    // printf("INFO: Copied %lld bytes\n", bytes);
-
     if (fclose(src) < 0) {
-        perror("ERROR: source file cannot be closed\n");
+        perror("ERROR: source file cannot be closed");
     }
     if (fclose(dest) < 0) {
-        perror("ERROR: destinition file cannot be closed\n");
+        perror("ERROR: destinition file cannot be closed");
     }
 
     return true;

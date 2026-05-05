@@ -1,11 +1,11 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-void init_game();
+void *init_game();
 
-void update_game();
+void update_game(void *state);
 
-void clear_game();
+void clear_game(void *state);
 
 int add_game(int a, int b);
 

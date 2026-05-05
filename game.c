@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "game.h"
 
@@ -20,25 +21,24 @@ typedef struct state {
     float angle;
 } State;
 
-State s = {0};
+// State s = {0};
 
-void init_game() {
-    s = (State){WIDTH / 2, HEIGHT / 2, DIST, RADIUS, 0};
-    // InitWindow(WIDTH, HEIGHT, "Window");
+void *init_game() {
+    State *s = (State *)malloc(sizeof(State));
+    *s = (State){WIDTH / 2, HEIGHT / 2, DIST, RADIUS, 0};
     printf("INFO: GAME: init called\n");
+    return (void *)s;
 }
 
-void update_game() {
-    int x = s.distance * cosf(s.angle);
-    int y = s.distance * sinf(s.angle);
-    s.angle += SPEED * GetFrameTime();
+void update_game(void *state) {
+    State *cur_state = (State *)state;
+    int x = cur_state->distance * cosf(cur_state->angle);
+    int y = cur_state->distance * sinf(cur_state->angle);
+    cur_state->angle += SPEED * GetFrameTime();
     ClearBackground(BLACK);
-    DrawCircle(WIDTH / 2 + x, HEIGHT / 2 - y, s.rad, BLUE);
+    DrawCircle(WIDTH / 2 + x, HEIGHT / 2 - y, cur_state->rad, RED);
 }
+
+void clear_game(void *state) { printf("INFO: GAME: clear called\n"); }
 
 int add_game(int a, int b) { return a * b; }
-
-void clear_game() {
-    // CloseWindow();
-    printf("INFO: GAME: clear called\n");
-}
