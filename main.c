@@ -135,29 +135,6 @@ UPDATE_STATE get_update_state(const char *file_path) {
     return update_state;
 }
 
-bool is_updated(const char *file_path) {
-    static time_t last_updated_time = 0;
-    static long int last_file_size = 0;
-
-    if (stat(file_path, &file_info) != 0) {
-        fprintf(stderr, "ERROR: Error getting stats\n");
-        perror("stat");
-        return false;
-    }
-
-    if (file_info.st_mtime > last_updated_time) {
-        if (file_info.st_size != last_file_size) {
-            last_file_size = file_info.st_size;
-            return false;
-        }
-
-        last_updated_time = file_info.st_mtime;
-        return true;
-    }
-
-    return false;
-}
-
 bool copy_file(const char *src_path, const char *dest_path) {
 
     printf("INFO: Copying %s into %s\n", src_path, dest_path);
